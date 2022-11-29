@@ -103,3 +103,47 @@ app.listen(3000, () => {
    2) 특정 모듈 단위로 하나의 컨트롤러 안에서 여러 요청 단위를 구분해 처리하기
    3) 프런트 컨트롤러를 따로 두어 모든 요청을 하나의 컨트롤러로 모은 다음 요청에
       따라 구현 컨트롤러를 호출하기
+      
+------------------------------------------------------------------------------
+import { axiosInstance } from 'apis';
+import { TodoApi } from 'apis/todoApi';
+import useInput from 'hooks/useInput';
+
+function TodoForm({ todoList, setTodoList }) {
+    const [todo, onChangeTodo, setTodo] = useInput('');
+
+    // 추가 버튼 눌렀을 때 어떻게 해야할까?
+    // 어떤 걸 input으로 삼고 결과값으로 어떻게 해야합니까
+
+    const onClickAddBtn = () => {
+        // ? -> todo -> 성공, 실패
+        /* 성공 ->  어떤 결과값? -> todolist 추가
+                    결과값의 형태? -> json 형태의 객체
+                    {
+                        id : DB에 저장된 고유번호
+                        content : DB에 저장된 내용
+                        flag : 기본값 0
+                    }
+                    todoList, setTodoList를 props
+        */
+        // 실패 -> alert 경고창, 에러 페이지로 이동 (500, 404 => 에러페이지)
+
+        TodoApi.createTodo({ content: todo })
+            .then((res) => {
+                if (res.status === 200) {
+                    alert('ADD TODOLIST');
+                    setTodoList([res.data.data, ...todoList]);
+                    setTodo('');
+                }
+            })
+            .catch((err) => console.log(err));
+    };
+
+    return (
+        <>
+            <input value={todo} onChange={onChangeTodo} />
+            <button onClick={onClickAddBtn}>추가</button>
+        </>
+    );
+}
+export default TodoForm;
