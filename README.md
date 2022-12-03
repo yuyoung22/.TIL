@@ -162,3 +162,32 @@ export default TodoForm;
     ViewResolver : 컨트롤러의 처리 결과를 전달할 뷰를 지정
 
     View : 컨트롤러의 처리 결과 화면을 생성
+    ---------------------------------------------------------------------------------
+    package com.koreait.myapp.di;
+
+import java.time.LocalDateTime;
+
+public class  MemberRegisterService {
+
+   // MemberDao - DB처리를 위해 
+   
+    private MemberDao memberDao = new MemberDao();  
+   
+
+   public void regist(RegisterRequest req) {
+        // 이메일로 회원 데이터(Member)조회
+       Member member = memberDao.selectByEmail(req.getEmail());
+       if (member != null) {
+            // 같은 이메일을 가진 회원이 이미 존재하면 예외 발생
+          throw new DuplicateMemberException("dup email " + req.getEmail());
+       }
+       //같은 이메일 가진 회원이 존재하지 않으면 DB에 삽입
+       Member newMember = new Member(
+             req.getEmail(), req.getPassword(), req.getName(), 
+             LocalDateTime.now());
+        memberDao.insert(newMember);
+ }
+}
+
+   
+    
