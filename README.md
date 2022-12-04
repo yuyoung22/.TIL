@@ -187,7 +187,4 @@ public class  MemberRegisterService {
              LocalDateTime.now());
         memberDao.insert(newMember);
  }
-}
-
-   
-    
+ ------------------------------------------------------------------------------------
