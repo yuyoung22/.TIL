@@ -1,6 +1,102 @@
-# .TIL
+#1
+   < 스프링프레임워크의 구동 원리  > 
+    DispatcherServlet : 클라이언트의 요청을 전달받아 해당 요청에 대한 컨트롤러를
+         선택하여 클라이언트의 요청을 전달,
+         또한 컨트롤러가 반환한 값을 View에 전달하여 알맞은 응답을 생성
 
-#jdbc 프로그래밍
+    HandlerMapping : 클라이언트가 요청한 URL을 처리할 컨트롤러를 지정
+
+    Controller : 클라이언트의 요청을 처리한 후 그 결과를 DispatcherServlet에 전달
+
+    ModelAndView : 컨트롤러가 처리한 결과 및 뷰 선택에 필요한 정보를 저장
+
+    ViewResolver : 컨트롤러의 처리 결과를 전달할 뷰를 지정
+
+    View : 컨트롤러의 처리 결과 화면을 생성
+---------------------------------------------------------------------------------
+#2
+.웹을 통해 접근할 수 있는 디렉터리 경로 : 문서의 root 경로
+   톰캣의 webapps
+   이클립스(2020_12) : WebContent
+   이클립스(2022_09) : WebApps
+따라서 업로드되는 파일 역시 html/jsp에서 참조가능한 WebContent(WebApps)에 넣는다.
+   WebContent(WebApps) 아래에 [imgage]폴더를 만들고 파일을 업로드하면 이클립스에서 
+   실행중인 톰캣은 이미 프로젝트를 패키지화해서 별도의 경로에서 서비스하기 때문에
+   업로드된 파일을 인식하지 못하는 문제가 발생하여 프로젝트를 다시 실행하거나
+    톰캣을 다시 시작해야하는 문제가 있음
+   
+   우리예제는 C:/Temp/image에 저장함  => 이러면 웹에서 접근을 할 수 없는 문제 발생
+      이미지 로드되지 않았던 문제가 이러한 문제에서 발생
+            => 톰캣에서 C:/Temp/image 폴더에 접근하도록 설정하는 것이 필요
+  [Servers] -[Tomcat v9.0...] - [server.xml]의 155번째 줄을 </HOST> 앞에 다음을 추가 하고 저장한 후 다시 시작
+   <Context docBase="c:/temp/image" path="/image" reloadable="true"/>
+
+      <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">
+
+        <!-- SingleSignOn valve, share authentication between web applications
+             Documentation at: /docs/config/valve.html -->
+        <!--
+        <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
+        -->
+
+        <!-- Access log processes all example.
+             Documentation at: /docs/config/valve.html
+             Note: The pattern used is equivalent to using pattern="common" -->
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
+
+      <Context docBase="newsweb" path="/newsweb" reloadable="true" source="org.eclipse.jst.jee.server:newsweb"/>
+      <Context docBase="c:/temp/image" path="/image" reloadable="true"/>
+      </Host>
+
+=====================================================
+DAO  : Data Access Object , db의 데이터에 접근하기 위한 객체
+   db접속과 db의 데이터 처리에 해당하는 sql 쿼리문 작성...   
+
+DTO/VO
+DTO : Data Transfer Object  => db테이블의 자료를 가져다 객체로 만들기
+       테이블의 필드명을 토대로 getter/setter 만들기...
+      form에서 입력된 자료를 데이터베이스 테이블에 넣기
+VO : Value Object 
+
+=======================================================
+웹에서 인식하는 첫 페이지 설정(index파일 설정)
+   [WebContent(WebApps)] -[ web.xml ] 파일에서 설정
+   기본적인 파일명이 아닌 자신만의 파일명을 쓰려면 여기서 설정
+   그러나 index.html/ index.jsp / default.jsp 정도로 설정하는 것이 좋음
+
+배포 파일 만들기
+   프로젝트명(newsweb) 위에서 마우스 오른쪽 : Export - War File
+      Web project : 프로젝트명
+      Destination : [Browse]버튼을 눌러 war파일을 저장할 위치 선택
+      Target runtime : 톰캣
+      Export source File 체크하면 :  *.java 파일까지 함께 압축함
+                                   체크해제 : *.class 파일만 압축
+ 
+        압축된 war파일을 설치된 톰캣이 있는 폴더[C:\apache-tomcat-9.0.69]로
+   이동해서 [ webapps ] 폴더 아래에 놓으면 끝
+==========================================================
+톰캣 (apache-tomcat-9.0.69)
+   bin : 실행파일들이 있는 곳
+   conf : 환경설정 파일들이 있는 곳
+      server.xml - 포트 번호 경도 이곳에서 함
+            <Connector port="8080" protocol="HTTP/1.1"
+                        connectionTimeout="20000"
+                           redirectPort="8443" />
+   lib : 라이브러리 파일들이 있는 곳
+   webapps : 개발한 사이트를 넣는 곳(개발한 프로젝트를 넣는 곳)
+      만약 사이트를 여러 개(웹 페이지를 여러개(프로젝트를 여러개))만들어서 
+      서버에서 구동시키려면 각각 context를 만들어 webapps 폴더 아래에 위치시킴
+
+    webapps - ROOT : 프로그램을 개발한 사이트 넣는 곳
+       이미지, html, css, javascript,....
+
+   webapps-WEB_INF : ~.java, ~.class(자바클래스, 서블릿 등이 위치)
+
+   jsp 파일(파일명.jsp) : 반드시 서버에서 실행
+   html파일(파일명.html) : 웹브라우저에서 실행시키기 때문에 서버 없이도 아무 곳에서나 실행 가능함
+-----------------------------------------------------------------------------------------------
+#3
+jdbc 프로그래밍
 
 1. JDBC 드라이버 로드 :  Class.forName()
        oracle : oracle.jdbc.driver.OracleDriver
@@ -39,50 +135,27 @@
    rs.close();
    pstmt.close();
    conn.close();
-====================
-const express = require('express');
-const app = express();
-// morgan
-/* 
-log를 찍어주는 미들웨어는
-다양한 모드를 지원
-ex) dev, combined, common, short, tiny
-보통 개발용으로는 dev를 사용하고
-배포용으로는 combined를 사용
+------------------------------------------------------------------------------------------------------
+#4
+-- db만들기
+create database newsdb;
+-- db안으로 들어가기
+use newsdb;
 
-npm i morgan
-*/
+-- db지우기 : drop database db명
 
-const morgan = require('morgan');
-app.use(morgan('dev'));
+-- 테이블 생성
+create table news(
+   aid int auto_increment not null primary key, -- 기사 아이디
+    title varchar(200) not null, -- 기사 제목
+    image varchar(500) not null, -- 사진 경로
+    date  timestamp,  -- 기사 등록날짜와 시간
+    content varchar(1000) not null -- 기사 내용
+);
 
-// body-parser
-// req message로 전달받은 body의 데이터를 해석
-// express 4.16.0 이상부터는 기본 내장
-
-app.use(express.json()); // json 데이터를 읽는 것을 허용
-app.use(express.urlencoded({ extended: false }));
-// url에 있는 정보 (param, qurey-string) express 내부에 있는 해석툴로 해석을 할 것인지
-// false면 내장된 것을 사용
-// true면 추가로 라이브러릴 설치해서 내가 원하는 라이브러리로 해석
-// qs라는 모듈을 내장하고 있으나 다른 라이브러리를 사용하여 url에 담긴 데이터를 해석할 수도 있음
-
-// static
-// express에 내장, 정적인 파일(리소스, html, css, js, img, mp4... ) 을 서버에 제공
-
-const path = require('path');
-// ()안에 있는 경로를 문자열로 나타냄, 기본값 root 폴더
-app.use('/', express.static(path.join(__dirname, 'public')));
-// URL "/"로 접속 시 public 폴더로 접근이 가능
-
-app.get('/', (req, res) => {
-    res.send('Hello express');
-});
-
-app.listen(3000, () => {
-    console.log('3000번으로 서버 실행 중');
-});
----------------------------------------------------------------------------
+select * from news;
+-------------------------------------------------------------------------------------------------------
+#5
 
 1. 모델(Model) : 데이터를 처리하는 영역
    DAO, DO
@@ -103,88 +176,17 @@ app.listen(3000, () => {
    2) 특정 모듈 단위로 하나의 컨트롤러 안에서 여러 요청 단위를 구분해 처리하기
    3) 프런트 컨트롤러를 따로 두어 모든 요청을 하나의 컨트롤러로 모은 다음 요청에
       따라 구현 컨트롤러를 호출하기
-      
-------------------------------------------------------------------------------
-import { axiosInstance } from 'apis';
-import { TodoApi } from 'apis/todoApi';
-import useInput from 'hooks/useInput';
+-------------------------------------------------------------------------------------------------------
+#6
+<뷰>
+   1. 전체 상품 목록 : productList.jsp
+   2. 상품 정보를 출력 : productInfo.jsp
 
-function TodoForm({ todoList, setTodoList }) {
-    const [todo, onChangeTodo, setTodo] = useInput('');
+<모델>
+   3. 상품정보를 표현하기 위한 DO 객체  : Product.java
+   4. 데이터베이스 없이 샘플 데이터를 제공하기 위한 클래스 : ProductSevice.java
 
-    // 추가 버튼 눌렀을 때 어떻게 해야할까?
-    // 어떤 걸 input으로 삼고 결과값으로 어떻게 해야합니까
-
-    const onClickAddBtn = () => {
-        // ? -> todo -> 성공, 실패
-        /* 성공 ->  어떤 결과값? -> todolist 추가
-                    결과값의 형태? -> json 형태의 객체
-                    {
-                        id : DB에 저장된 고유번호
-                        content : DB에 저장된 내용
-                        flag : 기본값 0
-                    }
-                    todoList, setTodoList를 props
-        */
-        // 실패 -> alert 경고창, 에러 페이지로 이동 (500, 404 => 에러페이지)
-
-        TodoApi.createTodo({ content: todo })
-            .then((res) => {
-                if (res.status === 200) {
-                    alert('ADD TODOLIST');
-                    setTodoList([res.data.data, ...todoList]);
-                    setTodo('');
-                }
-            })
-            .catch((err) => console.log(err));
-    };
-
-    return (
-        <>
-            <input value={todo} onChange={onChangeTodo} />
-            <button onClick={onClickAddBtn}>추가</button>
-        </>
-    );
-}
-export default TodoForm;
-----------------------------------------------------------------------------------
-< 스프링프레임워크의 구동 원리  > 
-    DispatcherServlet : 클라이언트의 요청을 전달받아 해당 요청에 대한 컨트롤러를
-         선택하여 클라이언트의 요청을 전달,
-         또한 컨트롤러가 반환한 값을 View에 전달하여 알맞은 응답을 생성
-
-    HandlerMapping : 클라이언트가 요청한 URL을 처리할 컨트롤러를 지정
-
-    Controller : 클라이언트의 요청을 처리한 후 그 결과를 DispatcherServlet에 전달
-
-    ModelAndView : 컨트롤러가 처리한 결과 및 뷰 선택에 필요한 정보를 저장
-
-    ViewResolver : 컨트롤러의 처리 결과를 전달할 뷰를 지정
-
-    View : 컨트롤러의 처리 결과 화면을 생성
-    ---------------------------------------------------------------------------------
-    package com.koreait.myapp.di;
-
-import java.time.LocalDateTime;
-
-public class  MemberRegisterService {
-
-   // MemberDao - DB처리를 위해 
-   
-    private MemberDao memberDao = new MemberDao();  
-   
-
-   public void regist(RegisterRequest req) {
-        // 이메일로 회원 데이터(Member)조회
-       Member member = memberDao.selectByEmail(req.getEmail());
-       if (member != null) {
-            // 같은 이메일을 가진 회원이 이미 존재하면 예외 발생
-          throw new DuplicateMemberException("dup email " + req.getEmail());
-       }
-       //같은 이메일 가진 회원이 존재하지 않으면 DB에 삽입
-       Member newMember = new Member(
-             req.getEmail(), req.getPassword(), req.getName(), 
-             LocalDateTime.now());
-        memberDao.insert(newMember);
- }
- ------------------------------------------------------------------------------------
+<컨트롤러>
+   5. ProductService.java
+      1) service 메서드를 오버라이딩하여 컨트롤러 기본 구조 구현 
+        2) 각각의 요청은 action 파라미터를 비교해 메서드를 호출한 다음 뷰로 이동하도로 구현
