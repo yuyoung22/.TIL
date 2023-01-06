@@ -47,7 +47,6 @@
       <Context docBase="newsweb" path="/newsweb" reloadable="true" source="org.eclipse.jst.jee.server:newsweb"/>
       <Context docBase="c:/temp/image" path="/image" reloadable="true"/>
       </Host>
-
 =====================================================
 DAO  : Data Access Object , db의 데이터에 접근하기 위한 객체
    db접속과 db의 데이터 처리에 해당하는 sql 쿼리문 작성...   
@@ -60,7 +59,7 @@ VO : Value Object
 
 =======================================================
 웹에서 인식하는 첫 페이지 설정(index파일 설정)
-   [WebContent(WebApps)] -[ web.xml ] 파일에서 설정
+   [WebContent(WebApps)] -[ web.xml ] 파일에서 설정.
    기본적인 파일명이 아닌 자신만의 파일명을 쓰려면 여기서 설정
    그러나 index.html/ index.jsp / default.jsp 정도로 설정하는 것이 좋음
 
