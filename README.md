@@ -47,7 +47,7 @@
       <Context docBase="newsweb" path="/newsweb" reloadable="true" source="org.eclipse.jst.jee.server:newsweb"/>
       <Context docBase="c:/temp/image" path="/image" reloadable="true"/>
       </Host>
-=====================================================
+========================================================================================================
 DAO  : Data Access Object , db의 데이터에 접근하기 위한 객체
    db접속과 db의 데이터 처리에 해당하는 sql 쿼리문 작성...   
 
