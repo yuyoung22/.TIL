@@ -8,7 +8,7 @@
 
     Controller : 클라이언트의 요청을 처리한 후 그 결과를 DispatcherServlet에 전달
 
-    ModelAndView : 컨트롤러가 처리한 결과 및 뷰 선택에 필요한 정보를 저장
+    ModelAndView : 컨트롤러가 처리한 결과 및 뷰 선택에 필요한 정보를 저장.
 
     ViewResolver : 컨트롤러의 처리 결과를 전달할 뷰를 지정.
 
