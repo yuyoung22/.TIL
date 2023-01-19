@@ -2,9 +2,9 @@
    < 스프링프레임워크의 구동 원리  > 
     DispatcherServlet : 클라이언트의 요청을 전달받아 해당 요청에 대한 컨트롤러를
          선택하여 클라이언트의 요청을 전달,
-         또한 컨트롤러가 반환한 값을 View에 전달하여 알맞은 응답을 생성
+         또한 컨트롤러가 반환한 값을 View에 전달하여 알맞은 응답을 생성.
 
-    HandlerMapping : 클라이언트가 요청한 URL을 처리할 컨트롤러를 지정
+    HandlerMapping : 클라이언트가 요청한 URL을 처리할 컨트롤러를 지정.
 
     Controller : 클라이언트의 요청을 처리한 후 그 결과를 DispatcherServlet에 전달.
 
