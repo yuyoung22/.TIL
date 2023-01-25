@@ -75,8 +75,8 @@ VO : Value Object
    이동해서 [ webapps ] 폴더 아래에 놓으면 끝.
 ==========================================================
 톰캣 (apache-tomcat-9.0.69)
-   bin : 실행파일들이 있는 곳
-   conf : 환경설정 파일들이 있는 곳
+   bin : 실행파일들이 있는 곳.
+   conf : 환경설정 파일들이 있는 곳.
       server.xml - 포트 번호 경도 이곳에서 함.
             <Connector port="8080" protocol="HTTP/1.1"
                         connectionTimeout="20000"
