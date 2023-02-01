@@ -60,8 +60,8 @@ VO : Value Object
 =======================================================
 웹에서 인식하는 첫 페이지 설정(index파일 설정)
    [WebContent(WebApps)] -[ web.xml ] 파일에서 설정.
-   기본적인 파일명이 아닌 자신만의 파일명을 쓰려면 여기서 설정
-   그러나 index.html/ index.jsp / default.jsp 정도로 설정하는 것이 좋음
+   기본적인 파일명이 아닌 자신만의 파일명을 쓰려면 여기서 설정.
+   그러나 index.html/ index.jsp / default.jsp 정도로 설정하는 것이 좋음.
 
 배포 파일 만들기
    프로젝트명(newsweb) 위에서 마우스 오른쪽 : Export - War File
